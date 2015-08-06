@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 # JeeSite 企业信息化快速开发平台
 
 ## 平台简介
@@ -160,11 +158,3 @@ Hibernate性能上定不是问题。但对于大多数情况下，真正掌握Hi
 
 如果你仍然喜欢Hibernate，请点击[下载JeeSite Hibernate版本](https://github.com/thinkgem/jeesite/tree/master_hibernate)。
 =======
-#jee test
->>>>>>> b68d95d3ece54dc33915af8cbbc2d6b70ef99c8c
-=======
-#jee test
->>>>>>> b68d95d3ece54dc33915af8cbbc2d6b70ef99c8c
-=======
-#jee test
->>>>>>> b68d95d... Initial commit
