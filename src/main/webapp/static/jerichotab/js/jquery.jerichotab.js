@@ -256,7 +256,7 @@ $.extend($.fn, {
                     	$.fn.setTabActive(0).loadData(ps.isReaload);
                     }*/
                     
-                },
+                }
             };
             $.each(opts.tabs, function(i, n) {
                 $.fn.jerichoTab.addTab(n);
