@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.fund.dao.spider.TsFundMemberDao">
+    
+	<sql id="tsFundMemberColumns">
+		a.m_id AS "mId",
+		a.mname AS "mname",
+		a.meducation AS "meducation",
+		a.org_id AS "orgId",
+		a.mduty AS "mduty",
+		a.asset_mgt_scale AS "assetMgtScale",
+		a.is_public_placement AS "isPublicPlacement",
+		a.investment_years AS "investmentYears",
+		a.mimage AS "mimage",
+		a.target_url AS "targetUrl",
+		a.target_code AS "targetCode",
+		a.fund_id AS "fundId",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="tsFundMemberJoins">
+	</sql>
+    
+	<select id="get" resultType="TsFundMember">
+		SELECT 
+			<include refid="tsFundMemberColumns"/>
+		FROM ts_fund_member a
+		<include refid="tsFundMemberJoins"/>
+		<where>
+			<if test="mId != null and mId != ''"> and a.m_id = #{mId}</if>
+			<if test="targetUrl != null and targetUrl != ''"> and a.target_url = #{targetUrl}</if>
+		</where>
+	</select>
+	
+	<select id="findList" resultType="TsFundMember">
+		SELECT 
+			<include refid="tsFundMemberColumns"/>
+		FROM ts_fund_member a
+		<include refid="tsFundMemberJoins"/>
+		<where>
+			
+			<if test="mname != null and mname != ''">
+				AND a.mname = #{mname}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsFundMember">
+		SELECT 
+			<include refid="tsFundMemberColumns"/>
+		FROM ts_fund_member a
+		<include refid="tsFundMemberJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="mId" parameterType="TsFundMember">
+		INSERT INTO ts_fund_member(
+			mname,
+			meducation,
+			org_id,
+			mduty,
+			asset_mgt_scale,
+			is_public_placement,
+			investment_years,
+			mimage,
+			target_url,
+			target_code,
+			fund_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{mname},
+			#{meducation},
+			#{orgId},
+			#{mduty},
+			#{assetMgtScale},
+			#{isPublicPlacement},
+			#{investmentYears},
+			#{mimage},
+			#{targetUrl},
+			#{targetCode},
+			#{fundId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_fund_member SET 	
+			mname = #{mname},
+			meducation = #{meducation},
+			org_id = #{orgId},
+			mduty = #{mduty},
+			asset_mgt_scale = #{assetMgtScale},
+			is_public_placement = #{isPublicPlacement},
+			investment_years = #{investmentYears},
+			mimage = #{mimage},
+			target_url = #{targetUrl},
+			target_code = #{targetCode},
+			fund_id = #{fundId},
+			update_date = #{updateDate}
+		WHERE m_id = #{mId}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_fund_member
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.fund.dao.spider.TsFundNvDao">
+    
+	<sql id="tsFundNvColumns">
+		a.id AS "id",
+		a.fund_id AS "fundId",
+		a.nv_date AS "nvDate",
+		a.nav AS "nav",
+		a.add_nav AS "addNav",
+		a.nv_rate AS "nvRate",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="tsFundNvJoins">
+	</sql>
+    
+	<select id="get" resultType="TsFundNv">
+		SELECT 
+			<include refid="tsFundNvColumns"/>
+		FROM ts_fund_nv a
+		<include refid="tsFundNvJoins"/>
+		WHERE 1=1
+		<if test="id != null and id != ''">
+			AND a.id = #{id}
+		</if>
+		<if test="fundId != null and fundId != ''">
+			AND a.fund_id = #{fundId}
+		</if>
+		<if test="nvDate != null and nvDate != ''">
+			AND a.nv_date = #{nvDate}
+		</if>
+		
+		
+	</select>
+	
+	<select id="findList" resultType="TsFundNv">
+		SELECT 
+			<include refid="tsFundNvColumns"/>
+		FROM ts_fund_nv a
+		<include refid="tsFundNvJoins"/>
+		<where>
+			
+			<if test="nvDate != null and nvDate != ''">
+				AND a.nv_date = #{nvDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="selectLastNvDate" resultType="string">
+		select nv_date  from  ( select nv_date from ts_fund_nv where fund_id=#{fundId} ORDER BY nv_date desc  limit 1 ) t  ORDER BY nv_date asc  limit 1
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_fund_nv(
+			fund_id,
+			nv_date,
+			nav,
+			add_nav,
+			nv_rate,
+			create_date,
+			update_date
+		) VALUES (
+			#{fundId},
+			#{nvDate},
+			#{nav},
+			#{addNav},
+			#{nvRate},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_fund_nv SET 	
+			fund_id = #{fundId},
+			nv_date = #{nvDate},
+			nav = #{nav},
+			add_nav = #{addNav},
+			nv_rate = #{nvRate},
+			create_date = #{createDate},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_fund_nv
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

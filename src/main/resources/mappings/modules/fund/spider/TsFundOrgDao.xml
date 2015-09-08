@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.fund.dao.spider.TsFundOrgDao">
+    
+	<sql id="tsFundOrgColumns">
+		a.org_id AS "orgId",
+		a.org_name AS "orgName",
+		a.org_full_name AS "orgFullName",
+		a.profile AS "profile",
+		a.address AS "address",
+		a.researcher_scale AS "researcherScale",
+		a.broker_scale AS "brokerScale",
+		a.investment_idea AS "investmentIdea",
+		a.asset_mgt_scale AS "assetMgtScale",
+		a.min_asset_mgt_scale AS "minAssetMgtScale",
+		a.traget_url AS "tragetUrl",
+		a.traget_code AS "tragetCode",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="tsFundOrgJoins">
+	</sql>
+    
+	<select id="get" resultType="TsFundOrg">
+		SELECT 
+			<include refid="tsFundOrgColumns"/>
+		FROM ts_fund_org a
+		<include refid="tsFundOrgJoins"/>
+		<where>
+			<if test="orgId != null and orgId != ''"> and a.org_id = #{orgId}</if>
+			<if test="tragetUrl != null and tragetUrl != ''"> and a.traget_url = #{tragetUrl}</if>
+		</where>
+	</select>
+	
+	<select id="findList" resultType="TsFundOrg">
+		SELECT 
+			<include refid="tsFundOrgColumns"/>
+		FROM ts_fund_org a
+		<include refid="tsFundOrgJoins"/>
+		<where>
+			
+			<if test="orgName != null and orgName != ''">
+				AND a.org_name = #{orgName}
+			</if>
+			<if test="orgFullName != null and orgFullName != ''">
+				AND a.org_full_name = #{orgFullName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsFundOrg">
+		SELECT 
+			<include refid="tsFundOrgColumns"/>
+		FROM ts_fund_org a
+		<include refid="tsFundOrgJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="orgId" parameterType="TsFundOrg" >
+		INSERT INTO ts_fund_org(
+			org_name,
+			org_full_name,
+			profile,
+			address,
+			researcher_scale,
+			broker_scale,
+			investment_idea,
+			asset_mgt_scale,
+			min_asset_mgt_scale,
+			traget_url,
+			traget_code,
+			create_date,
+			update_date
+		) VALUES (
+			#{orgName},
+			#{orgFullName},
+			#{profile},
+			#{address},
+			#{researcherScale},
+			#{brokerScale},
+			#{investmentIdea},
+			#{assetMgtScale},
+			#{minAssetMgtScale},
+			#{tragetUrl},
+			#{tragetCode},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_fund_org SET 			
+			org_name = #{orgName},
+			org_full_name = #{orgFullName},
+			profile = #{profile},
+			address = #{address},
+			researcher_scale = #{researcherScale},
+			broker_scale = #{brokerScale},
+			investment_idea = #{investmentIdea},
+			asset_mgt_scale = #{assetMgtScale},
+			min_asset_mgt_scale = #{minAssetMgtScale},
+			traget_url = #{tragetUrl},
+			traget_code = #{tragetCode},
+			update_date = #{updateDate}
+		WHERE org_id = #{orgId}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_fund_org
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

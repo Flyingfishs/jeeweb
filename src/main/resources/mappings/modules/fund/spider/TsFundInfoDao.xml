@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.fund.dao.spider.TsFundInfoDao">
+    
+	<sql id="tsFundInfoColumns">
+		a.fund_id AS "fundId",
+		a.fund_name AS "fundName",
+		a.fund_full_name AS "fundFullName",
+		a.foundation_date AS "foundationDate",
+		a.end_date AS "endDate",
+		a.status AS "status",
+		a.status_cn AS "statusCn",
+		a.issuing_scale AS "issuingScale",
+		a.investment_idea AS "investmentIdea",
+		a.feature AS "feature",
+		a.appraise AS "appraise",
+		a.is_private AS "isPrivate",
+		a.account_number AS "accountNumber",
+		a.account_name AS "accountName",
+		a.investment_target AS "investmentTarget",
+		a.investment_strategy AS "investmentStrategy",
+		a.investment_range AS "investmentRange",
+		a.orientation AS "orientation",
+		a.init_nav AS "initNav",
+		a.financing_scale AS "financingScale",
+		a.real_financing_scale AS "realFinancingScale",
+		a.manager_share_scale AS "managerShareScale",
+		a.valid_purchase_number AS "validPurchaseNumber",
+		a.rg_f AS "rgF",
+		a.sh_f AS "shF",
+		a.gl_f AS "glF",
+		a.fgdl_f AS "fgdlF",
+		a.target_url AS "targetUrl",
+		a.target_code AS "targetCode",
+		a.target_orgurl AS "targetOrgurl",
+		a.nav_date AS "navDate",
+		a.nav AS "nav",
+		a.add_nav AS "addNav",
+		a.org_id AS "orgId",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.target_type AS "targetType",
+		a.targer_run AS "targerRun",
+		a.traget_time AS "tragetTime",
+		a.type AS "type",
+		a.m_name AS "mName",
+		a.m_url AS "mUrl",
+		a.org_name AS "orgName",
+		a.org_url AS "orgUrl"
+	</sql>
+	
+	<sql id="tsFundInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="TsFundInfo">
+		SELECT 
+			<include refid="tsFundInfoColumns"/>
+		FROM ts_fund_info a
+		<include refid="tsFundInfoJoins"/>
+		
+		<where>
+			<if test="fundId != null and fundId != ''"> and a.fund_id = #{fundId}</if>
+			<if test="targetUrl != null and targetUrl != ''"> and a.target_Url = #{targetUrl}</if>
+		</where>
+	</select>
+	
+	<select id="getSpider" resultType="TsFundInfo">
+		SELECT 
+			<include refid="tsFundInfoColumns"/>
+		FROM ts_fund_info a
+		where 1=1 
+		AND a.target_url = 'http://simu.howbuy.com/zexi/P00511/'
+		<!-- and targer_run=0 or (targer_run=1 and  traget_time &lt; date_add(now(), interval -1 day)  )
+		and  a.target_type = #{targetType} -->
+		order by a.update_date asc
+		limit 0,1
+	</select>
+	
+	<select id="findList" resultType="TsFundInfo">
+		SELECT 
+			<include refid="tsFundInfoColumns"/>
+		FROM ts_fund_info a
+		<include refid="tsFundInfoJoins"/>
+		<where>
+			
+			<if test="fundName != null and fundName != ''">
+				AND a.fund_name = #{fundName}
+			</if>
+			<if test="fundFullName != null and fundFullName != ''">
+				AND a.fund_full_name = #{fundFullName}
+			</if>
+			<if test="targerRun != null and targerRun != ''">
+				AND a.targer_run = #{targerRun}
+			</if>
+			<if test="targetType != null and targetType != ''">
+				AND a.target_type = #{targetType}
+			</if>	
+					
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsFundInfo">
+		SELECT 
+			<include refid="tsFundInfoColumns"/>
+		FROM ts_fund_info a
+		<include refid="tsFundInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_fund_info(
+			fund_id,
+			fund_name,
+			fund_full_name,
+			foundation_date,
+			end_date,
+			status,
+			status_cn,
+			issuing_scale,
+			investment_idea,
+			feature,
+			appraise,
+			is_private,
+			account_number,
+			account_name,
+			investment_target,
+			investment_strategy,
+			investment_range,
+			orientation,
+			init_nav,
+			financing_scale,
+			real_financing_scale,
+			manager_share_scale,
+			valid_purchase_number,
+			rg_f,
+			sh_f,
+			gl_f,
+			fgdl_f,
+			target_url,
+			target_code,
+			target_orgurl,
+			nav_date,
+			nav,
+			add_nav,
+			org_id,
+			create_date,
+			update_date,
+			target_type,
+			targer_run,
+			traget_time,
+			type,
+			m_name,
+			m_url,
+			org_name,
+			org_url
+		) VALUES (
+			#{fundId},
+			#{fundName},
+			#{fundFullName},
+			#{foundationDate},
+			#{endDate},
+			#{status},
+			#{statusCn},
+			#{issuingScale},
+			#{investmentIdea},
+			#{feature},
+			#{appraise},
+			#{isPrivate},
+			#{accountNumber},
+			#{accountName},
+			#{investmentTarget},
+			#{investmentStrategy},
+			#{investmentRange},
+			#{orientation},
+			#{initNav},
+			#{financingScale},
+			#{realFinancingScale},
+			#{managerShareScale},
+			#{validPurchaseNumber},
+			#{rgF},
+			#{shF},
+			#{glF},
+			#{fgdlF},
+			#{targetUrl},
+			#{targetCode},
+			#{targetOrgurl},
+			#{navDate},
+			#{nav},
+			#{addNav},
+			#{orgId},
+			#{createDate},
+			#{updateDate},
+			#{targetType},
+			#{targerRun},
+			#{tragetTime},
+			#{type},
+			#{mName},
+			#{mUrl},
+			#{orgName},
+			#{orgUrl}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_fund_info SET 	
+			fund_id = #{fundId},
+			fund_name = #{fundName},
+			fund_full_name = #{fundFullName},
+			foundation_date = #{foundationDate},
+			end_date = #{endDate},
+			status = #{status},
+			status_cn = #{statusCn},
+			issuing_scale = #{issuingScale},
+			investment_idea = #{investmentIdea},
+			feature = #{feature},
+			appraise = #{appraise},
+			is_private = #{isPrivate},
+			account_number = #{accountNumber},
+			account_name = #{accountName},
+			investment_target = #{investmentTarget},
+			investment_strategy = #{investmentStrategy},
+			investment_range = #{investmentRange},
+			orientation = #{orientation},
+			init_nav = #{initNav},
+			financing_scale = #{financingScale},
+			real_financing_scale = #{realFinancingScale},
+			manager_share_scale = #{managerShareScale},
+			valid_purchase_number = #{validPurchaseNumber},
+			rg_f = #{rgF},
+			sh_f = #{shF},
+			gl_f = #{glF},
+			fgdl_f = #{fgdlF},
+			target_url = #{targetUrl},
+			target_code = #{targetCode},
+			target_orgurl = #{targetOrgurl},
+			nav_date = #{navDate},
+			nav = #{nav},
+			add_nav = #{addNav},
+			org_id = #{orgId},
+			update_date = #{updateDate},
+			target_type = #{targetType},
+			targer_run = #{targerRun},
+			traget_time = #{tragetTime},
+			type = #{type},
+			m_name = #{mName},
+			m_url = #{mUrl},
+			org_name = #{orgName},
+			org_url = #{orgUrl}
+		WHERE fund_id = #{fundId}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_fund_info
+		WHERE fund_id = #{fundId}
+	</update>
+	
+</mapper>

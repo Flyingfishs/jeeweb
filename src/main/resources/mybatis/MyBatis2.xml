@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE generatorConfiguration  
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"  
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 
+此文档的重要说明
+http://git.oschina.net/free/Mybatis_Utils/blob/master/MybatisGeneator/MybatisGeneator.md
+-->
+
+<generatorConfiguration>
+	<classPathEntry location="E:/works/maven/repository/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.jar" /><!--驱动包的绝对路径 -->
+	<context id="MYsqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
+	<!-- targetRuntime="MyBatis3"  -->
+
+		<commentGenerator><!--具体参看mybatis-generator -->
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+		<!--数据库连接信息。具体参看mybatis-generator -->
+		<!-- 
+		<jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			connectionURL="jdbc:sqlserver://121.42.151.152:1433;DatabaseName=webbuilder_dev"
+			userId="sa" password="Pass1234">
+		</jdbcConnection>
+		
+		 http://blog.sina.com.cn/s/blog_6f7d179e0102uwjm.html
+		 
+		 props.setProperty("remarks", "true"); //设置可以获取remarks信息 
+            props.setProperty("useInformationSchema", "true");//设置可以获取tables remarks信息
+		 -->
+		
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" 
+			connectionURL="jdbc:mysql://localhost:3306/jeesite" 
+			userId="root" password="123456"
+			remarks="true" useInformationSchema="true"
+			> </jdbcConnection>
+		<javaTypeResolver><!--具体参看mybatis-generator -->
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!--以下三个标签主要解析targetPackage和targetProject。其它的具体参看mybatis-generator -->
+
+		<!--targetPackage，是生成文件所在的包路径 -->
+
+		<!--targetProject，是相对于本xml配置文件的相对路径，是targetPackage包路径的父级目录。 -->
+
+		<javaModelGenerator targetPackage="com.thinkgem.jeesite.modules.tz.entity"
+			targetProject="">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+			<property name="javaFileEncoding" value="UTF-8" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.thinkgem.jeesite.modules.tz.mapping"
+			targetProject="">
+			<property name="enableSubPackages" value="true" />
+			<property name="javaFileEncoding" value="UTF-8" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.thinkgem.jeesite.modules.tz.dao" targetProject="">
+			<property name="enableSubPackages" value="true" />
+			<property name="javaFileEncoding" value="UTF-8" />
+		</javaClientGenerator>
+
+		<!--与原来mybatis-generator不一样，这个table标签不是必须的。只有对生成的映射有复杂要求时，才需要在这里详细配置 -->
+		<!-- <table tableName="MYTABLE" schema="MYSCHEMA"> <ignoreColumn column="fred"/> 
+			<columnOverride column="BEG_DATE" property="startDate"/> </table> -->
+		<table tableName="%" enablexxExample="true">
+			<!-- useActualColumnNames-使用真实列名 ,
+                 true-嗯。如果false，则由columnOverride节点控制  -->
+            <property name="useActualColumnNames" value="true"/>   
+ 
+            <!-- 标识列
+                column="列名" sqlStatement="某种数据库语言" identity="作为主键" -->
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+          
+            <!-- 覆盖项，当上面的property name="useActualColumnNames" value="true"时。 
+                column="被覆盖值的列名" property="用来覆盖的对应的java类的属性" -->
+            <!-- <columnOverride column="name" property="generName" /> -->
+	    </table>
+	    <property name="useActualColumnNames" value="true"/> 
+	    
+	</context>
+</generatorConfiguration> 

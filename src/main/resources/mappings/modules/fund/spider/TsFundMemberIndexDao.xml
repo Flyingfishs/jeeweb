@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.fund.dao.spider.TsFundMemberIndexDao">
+    
+	<sql id="tsFundMemberIndexColumns">
+		a.id AS "id",
+		a.fund_id AS "fundId",
+		a.m_id AS "mId",
+		a.dispindex AS "dispindex",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="tsFundMemberIndexJoins">
+	</sql>
+    
+	<select id="get" resultType="TsFundMemberIndex">
+		SELECT 
+			<include refid="tsFundMemberIndexColumns"/>
+		FROM ts_fund_member_index a
+		<include refid="tsFundMemberIndexJoins"/>
+		<where>
+			<if test="fundId != null and fundId != ''"> and a.fund_id = #{fundId}</if>
+			<if test="mId != null and mId != ''"> and a.m_id = #{mId}</if>
+		</where>
+	</select>
+	
+	<select id="findList" resultType="TsFundMemberIndex">
+		SELECT 
+			<include refid="tsFundMemberIndexColumns"/>
+		FROM ts_fund_member_index a
+		<include refid="tsFundMemberIndexJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsFundMemberIndex">
+		SELECT 
+			<include refid="tsFundMemberIndexColumns"/>
+		FROM ts_fund_member_index a
+		<include refid="tsFundMemberIndexJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ts_fund_member_index(
+			fund_id,
+			m_id,
+			dispindex,
+			create_date,
+			update_date
+		) VALUES (
+			#{fundId},
+			#{mId},
+			#{dispindex},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ts_fund_member_index SET 	
+			fund_id = #{fundId},
+			m_id = #{mId},
+			dispindex = #{dispindex},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM ts_fund_member_index
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
