@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.common.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -119,6 +120,21 @@ public class TimeUtils {
      */
     public TimeUtils(long time){
     	this(new Date(time));
+    }
+    
+    /**
+     * 
+     * @param time
+     * @param format
+     * @return
+     */
+    public static String timeTrans(long time,String format){
+    	if(format==null){
+    		format = "yyyy-MM-dd";
+    	}
+    	SimpleDateFormat sdf= new SimpleDateFormat(format);
+    	String sDateTime = sdf.format(new Date(time));
+    	return sDateTime;
     }
     
     /**

@@ -10,6 +10,8 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.supcan.annotation.treelist.cols.SupCol;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
@@ -23,6 +25,13 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * 实体编号（唯一标识）
+	 */
+	protected String id;
+	
+
+	
 	protected String remarks;	// 备注
 	protected User createBy;	// 创建者
 	protected Date createDate;	// 创建日期
@@ -32,12 +41,65 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	
 	public DataEntity() {
 		super();
+		this.id = id;
 		this.delFlag = DEL_FLAG_NORMAL;
 	}
 	
 	public DataEntity(String id) {
 		super(id);
 	}
+	
+	@SupCol(isUnique="true", isHide="true")
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+    /**
+	 * 是否是新记录（默认：false），调用setIsNewRecord()设置新记录，使用自定义ID。
+	 * 设置为true后强制执行插入语句，ID不会自动生成，需从手动传入。
+     * @return
+     */
+	public boolean getIsNewRecord() {
+        return isNewRecord || StringUtils.isBlank(getId());
+    }
+
+	/**
+	 * 是否是新记录（默认：false），调用setIsNewRecord()设置新记录，使用自定义ID。
+	 * 设置为true后强制执行插入语句，ID不会自动生成，需从手动传入。
+	 */
+	public void setIsNewRecord(boolean isNewRecord) {
+		this.isNewRecord = isNewRecord;
+	}
+
+	
+	/**
+	 * 获取数据库名称
+	 */
+	@JsonIgnore
+	public String getDbName(){
+		return Global.getConfig("jdbc.type");
+	}
+	
+    @Override
+    public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (!getClass().equals(obj.getClass())) {
+            return false;
+        }
+        DataEntity<?> that = (DataEntity<?>) obj;
+        return null == this.getId() ? false : this.getId().equals(that.getId());
+    }
+    
 	
 	/**
 	 * 插入之前执行方法，需要手动调用
